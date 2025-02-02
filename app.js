@@ -41,11 +41,16 @@ const clickSound = new Audio('ses/click-151673.mp3');
 const clearDisplay = () => display.textContent = "0";
 
 const addToDisplay = (v) => {
+    if (v === 'e' || /[eE]/.test(display.textContent)) {
+        return;
+    }
+
     display.textContent = display.textContent === "0" && !isNaN(v)
         ? v
         : /[+\-*/]$/.test(display.textContent) && /[+\-*/]/.test(v)
             ? display.textContent
             : display.textContent + v;
+
     clickSound.play();
 };
 
@@ -65,8 +70,11 @@ const calculateResult = () => {
 
 document.addEventListener("keydown", ({ key }) => {
     if (!isNaN(key) || /[+\-*/%]/.test(key)) addToDisplay(key);
+
     if (key === "Enter") calculateResult();
+
     if (key === "Backspace") display.textContent = display.textContent.slice(0, -1) || "0";
+
     if (key === "Delete") clearDisplay();
 });
 
@@ -76,3 +84,4 @@ buttons.forEach(button => {
         clickSound.play();
     });
 });
+
